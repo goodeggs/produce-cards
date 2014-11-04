@@ -8,9 +8,10 @@ Card = React.createClass
     flipped: false;
 
   render: ->
+    cx = React.addons.classSet
     <div className="card"
          onClick={@onClick}>
-      <div className={'card__flipper' + if @state.flipped then ' flipped' else ''}>
+      <div className={cx card__flipper: true, flipped: @state.flipped}>
         <img className="card__front"
              src={@props.photoUrl} />
         <div className="card__back">
