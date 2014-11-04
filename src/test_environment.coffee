@@ -1,3 +1,4 @@
+require './globals'
 chai = require 'chai'
 sinon = require 'sinon'
 sinonChai = require 'sinon-chai'

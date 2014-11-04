@@ -1,6 +1,6 @@
+require './src/globals'
 gulp = require 'gulp'
 gutil = require 'gulp-util'
-_ = require 'underscore'
 
 settings =
   port: 3000
@@ -18,7 +18,7 @@ buildBrowserify = do ->
   packageCache = {}
 
   (options={}) ->
-    browserify _.extend options,
+    browserify Object.assign options,
       extensions: ['.coffee', '.cjsx']
       insertGlobals: true # faster
       cache: cache

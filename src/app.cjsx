@@ -1,4 +1,6 @@
-React = require 'react'
+require './globals'
+Deck = require './components/deck'
+EggService = require './services/egg_service'
 
 # Source code here
  # loadEggs
@@ -7,21 +9,31 @@ React = require 'react'
  # -----
  # filter
 
-App =
+App = React.createClass
+
+  getInitialState: ->
+    eggs: []
+    selected: null
+
+  componentDidMount: ->
+    @fetchEggs()
+
+  loading: ->
+    @state.eggs.length < 1
+
   render: ->
-    <Deck />
+    <Deck eggs={@state.eggs}
+          selected={@state.selected} />
 
-  start: (selector) ->
-    React.render @render(), document.querySelector(selector)
-
-components = {}
+  # Actions
+  fetchEggs: ->
+    EggService.fetch (err, eggs) =>
+      @setState {eggs}
 
 services = {}
 
 models = {}
 
-actions =
-  loadEggs: ->
-  advance: ->
 
-window.App = App
+window.start = (selector) ->
+  React.render <App />, document.querySelector(selector)
