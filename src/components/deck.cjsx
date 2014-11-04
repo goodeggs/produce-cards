@@ -6,7 +6,7 @@ Deck = React.createClass
     eggs: React.PropTypes.array.isRequired
 
   render: ->
-    <div>{
+    <div className="deck">{
       for egg in @props.eggs
         <Card key={egg.email} {...egg} />
     }</div>
