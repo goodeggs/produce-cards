@@ -1,5 +1,5 @@
-App = require './app'
+app = require './app'
 
-describe 'App', ->
+describe 'app', ->
   it 'exists', ->
-    App.should.be.ok
+    app.should.be.ok
