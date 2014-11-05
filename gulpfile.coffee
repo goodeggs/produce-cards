@@ -39,14 +39,14 @@ gulp.task 'compile:tests', ->
   .pipe rename extname: '.js'
   .pipe gulp.dest 'lib/tests'
 
-gulp.task 'test:unit', ['compile:tests'], (done) ->
+gulp.task 'test:unit', ['compile:tests', 'concat:bower'], (done) ->
   karma = require('karma').server
   karma.start
     configFile: __dirname + '/karma.conf.coffee'
     singleRun: true
   , done
 
-gulp.task 'test:integration', ['compile:app', 'serve:dev', 'serve:selenium'], (done) ->
+gulp.task 'test:integration', ['compile:app', 'concat:bower', 'serve:dev', 'serve:selenium'], (done) ->
   {spawn} = require 'child_process'
 
   mocha = spawn 'mocha', [
@@ -89,6 +89,14 @@ gulp.task 'compile:app', ->
 
   bundle()
 
+gulp.task 'concat:bower', ->
+  concat = require 'gulp-concat'
+  mainBowerFiles = require 'main-bower-files'
+
+  gulp.src mainBowerFiles()
+  .pipe concat 'thirdparty.js'
+  .pipe gulp.dest 'lib'
+
 gulp.task 'serve:selenium', ->
   selenium = require 'selenium-standalone'
   tcpPort = require 'tcp-port-used'
@@ -126,7 +134,10 @@ gulp.task 'serve:dev', (done) ->
 gulp.task 'keepalive', ->
   setInterval (->), 10000
 
-gulp.task 'dev', ['compile:app', 'serve:dev', 'keepalive']
+gulp.task 'settings:dev', ->
+  settings.watch = true
+
+gulp.task 'dev', ['settings:dev', 'compile:app', 'concat:bower', 'serve:dev', 'keepalive']
 
 gulp.task 'open', ['dev'], ->
   open = require 'open'

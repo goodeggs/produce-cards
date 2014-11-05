@@ -44,7 +44,9 @@
     "chai-colors": "~1.0.0",
     "convict": "~0.5.1",
     "selenium-standalone": "~2.44.0-1",
-    "tcp-port-used": "~0.1.2"
+    "tcp-port-used": "~0.1.2",
+    "main-bower-files": "~2.1.0",
+    "gulp-concat": "~2.4.1"
   },
   "scripts": {
     "prepublish": "gulp clean build",
