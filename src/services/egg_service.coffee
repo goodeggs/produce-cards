@@ -7,6 +7,7 @@ class EggService
       "foodshed": "sfbay",
       "photo": {
         "baseUrl": "https://www.filepicker.io/api/file/qKlgDeAxQWm7bPnGkG4d",
+        "key": "user_profile_photo/5K8LE4VcQlWR1g0B7iR6_jillian.jpg"
       },
       "team": "Foodhub",
       "updatedAt": "2013-09-04T18:57:58.169Z",
@@ -24,6 +25,7 @@ class EggService
       "foodshed": "sfbay",
       "photo": {
         "baseUrl": "https://www.filepicker.io/api/file/742ToQCRVODofTZpWAgc",
+        "key": "user_profile_photo/5JDkeT1S2ao5BYIfApQD_zach.jpg"
       },
       "team": "Foodhub",
       "updatedAt": "2013-09-09T16:11:48.538Z",
@@ -39,7 +41,7 @@ class EggService
   @transform: (egg) ->
     email: egg.user.email
     name: egg.user.firstName
-    photoUrl: egg.photo.baseUrl
+    photoUrl: "https://goodeggs2.imgix.net/#{egg.photo.key}?w=500&h=500&q=&fit=crop&crop=faces"
 
   @fetch: (done) ->
     setTimeout =>

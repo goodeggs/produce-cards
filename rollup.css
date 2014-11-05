@@ -2,6 +2,7 @@
 }
 
 .card {
+  margin: 0 auto;
   -webkit-perspective: 1000;
   max-width: 500px;
 }
