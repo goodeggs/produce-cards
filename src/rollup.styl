@@ -1,27 +1,43 @@
 @import 'nib'
 
-.deck {
-}
+$eggshell = #F9F8F4
+$pearl = #EDEAE6
+$chestnut = #403E3B
+$oyster = #9C9795
+
+aspect-ratio(ratio)
+  position relative
+  &:before
+    content ""
+    display block
+    padding-top (100% / ratio)
+  > .aspect-content
+    position absolute
+    top 0
+    max-height 100%
+
+body
+  color $chestnut
+  background-color $oyster
+
+.deck {}
 
 .card
   margin 0 auto
   max-width 500px
   perspective 1000
-  width 500px
-  height 500px
 
-.card__flipper
-  width 100%
-  position relative
-  transition-timing-function cubic-bezier(0.190, 1.000, 0.220, 1.000) /* easeOutExpo */
+.card__swiper
+  transition-timing-function cubic-bezier(0.16, 0.06, 0.65, 0.24) /* fastOut */
   transform-style preserve-3d
   transform rotateY(0deg)
 
-/* Aspect Ratio */
-.card__flipper:before
-  content ""
-  display block
-  padding-top 100%
+.card__flipper
+  width 100%
+  aspect-ratio(1)
+  transition-timing-function cubic-bezier(0.190, 1.000, 0.220, 1.000) /* easeOutExpo */
+  transform-style preserve-3d
+  transform rotateY(0deg)
 
 .card__front,
 .card__back
@@ -29,12 +45,10 @@
   top 0
   left 0
   width 100%
+  height 100%
 
   backface-visibility hidden
-  background-color #BAF
-
-  /* Aspect Ratio */
-  height 100%
+  background-color $pearl
 
 .card__front
   z-index 2
@@ -50,3 +64,9 @@
 
 .card__back
   transform rotateY(180deg)
+
+.card__image
+  max-width 100%
+  max-height 100%
+
+
