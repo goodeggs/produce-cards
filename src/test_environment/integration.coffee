@@ -23,3 +23,12 @@ before ->
 
 after ->
   @browser.quit()
+
+module.exports =
+
+  # Usage:
+  # @browser.waitFor asPromised =>
+  #   @card.isDisplayed().should.eventually.eql false
+  asPromised: (promiser) ->
+    new wd.asserters.Asserter (browser, done) ->
+      promiser().nodeify (err) -> done(null, not err)
