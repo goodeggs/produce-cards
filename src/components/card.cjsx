@@ -1,5 +1,6 @@
 class Flipper
   rotation: 0
+  delta: 0
   maxRotation: 180
   flipped: false
 
@@ -10,7 +11,7 @@ class Flipper
     Math.min(Math.max(x, -1), 1)
 
   _ease: ->
-    @$el.css 'transition-duration', '0.8s'
+    @$el.css 'transition-duration', '1.0s'
 
   _instant: ->
     @$el.css 'transition-duration', '0s'
@@ -19,12 +20,14 @@ class Flipper
     @$el.css 'transform', "rotateY(#{@rotation}deg)"
 
   progress: (x) ->
+    oldRotation = @rotation
     @rotation = (@clamp(x) * @maxRotation).toFixed(5)
+    @delta = @rotation - oldRotation
     @_instant()
     @_sync()
 
   complete: ->
-    @rotation = if @rotation < 0 then -@maxRotation else @maxRotation
+    @rotation = if @delta < 0 then -@maxRotation else @maxRotation
     @flipped = true
     @_ease()
     @_sync()
@@ -73,9 +76,10 @@ Card = React.createClass
     <div className="card">
       <div className="card__flipper"}
           ref="flipper">
-        <img className="card__front"
-             draggable="false"
-             src={@props.photoUrl} />
+        <div className="card__front">
+          <img draggable="false"
+               src={@props.photoUrl} />
+        </div>
         <div className="card__back">
           {@props.name}
         </div>

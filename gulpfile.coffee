@@ -63,6 +63,19 @@ gulp.task 'test:integration', ['compile:app', 'concat:bower', 'serve:dev', 'serv
 
 gulp.task 'test', ['test:unit', 'test:integration']
 
+gulp.task 'styles', ->
+  nib = require 'nib'
+  stylus = require 'gulp-stylus'
+  rename = require 'gulp-rename'
+
+  gulp.src 'src/rollup.styl'
+  .pipe stylus
+    use: nib()
+    compress: false
+    linenos: true
+  .pipe rename 'rollup.css'
+  .pipe gulp.dest 'lib'
+
 gulp.task 'compile:app', ->
   source = require 'vinyl-source-stream'
   rename = require 'gulp-rename'
@@ -131,13 +144,13 @@ gulp.task 'serve:dev', (done) ->
     done()
   .listen port
 
-gulp.task 'keepalive', ->
-  setInterval (->), 10000
+gulp.task 'watch', ->
+  gulp.watch 'src/**/*.styl', ['styles']
 
 gulp.task 'settings:dev', ->
   settings.watch = true
 
-gulp.task 'dev', ['settings:dev', 'compile:app', 'concat:bower', 'serve:dev', 'keepalive']
+gulp.task 'dev', ['settings:dev', 'compile:app', 'concat:bower', 'styles', 'serve:dev', 'watch']
 
 gulp.task 'open', ['dev'], ->
   open = require 'open'

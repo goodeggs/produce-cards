@@ -1,0 +1,52 @@
+@import 'nib'
+
+.deck {
+}
+
+.card
+  margin 0 auto
+  max-width 500px
+  perspective 1000
+  width 500px
+  height 500px
+
+.card__flipper
+  width 100%
+  position relative
+  transition-timing-function cubic-bezier(0.190, 1.000, 0.220, 1.000) /* easeOutExpo */
+  transform-style preserve-3d
+  transform rotateY(0deg)
+
+/* Aspect Ratio */
+.card__flipper:before
+  content ""
+  display block
+  padding-top 100%
+
+.card__front,
+.card__back
+  position absolute
+  top 0
+  left 0
+  width 100%
+
+  backface-visibility hidden
+  background-color #BAF
+
+  /* Aspect Ratio */
+  height 100%
+
+.card__front
+  z-index 2
+  transform rotateY(0deg)
+
+.card__back
+  text-align center
+  font-size 40px
+
+  display -webkit-box
+  -webkit-box-pack center
+  -webkit-box-align center
+
+.card__back
+  transform rotateY(180deg)
