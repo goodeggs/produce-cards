@@ -111,7 +111,6 @@ class Swiper
     oldDisplacement = @displacement
     @displacement = if direction < 0 then -@finalDisplacement else @finalDisplacement
     duration = Math.abs(@displacement - oldDisplacement) / velocity
-    console.log duration, velocity
     @_ease(duration)
     @_sync()
     @onCompleted?()
@@ -149,16 +148,25 @@ Card = React.createClass
 
   componentDidMount: ->
     @flipper = new Flipper jQuery(@refs.flipper.getDOMNode()),
-      onCompleted: => @setState flipped: true
+      onCompleted: =>
+        @setState flipped: true
 
     @swiper = new Swiper jQuery(@refs.swiper.getDOMNode()),
-      onCompleted: => @setState swiped: true
+      onCompleted: @onSwipeCompleted
 
     @$el = jQuery @getDOMNode()
     @$el.swipe
       allowPageScroll: 'vertical'
       swipeStatus: @onSwipeStatus
       tap: @onTap
+
+  onSwipeCompleted: ->
+    @setState swiped: true
+    @$el.transitionEnd (event) =>
+      return unless jQuery(event.target).hasClass 'card__swiper'
+      @$el.off()
+      # TODO: remove this card. Add a new one?
+      console.log "CARD DONE!"
 
   onTap: ->
     switch
