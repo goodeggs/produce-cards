@@ -135,7 +135,7 @@ gulp.task 'serve:dev', (done) ->
     if err.code is 'EADDRINUSE'
       fallbackPort = port + Math.floor(Math.random() * 1000)
       gutil.log "#{port} is busy, trying #{fallbackPort}"
-      setImmediate -> server.listen fallbackPort
+      setImmediate => @listen fallbackPort
     else
       throw err
   .on 'listening', ->

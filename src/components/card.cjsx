@@ -2,7 +2,6 @@ class Flipper
   rotation: 0
   delta: 0
   maxRotation: 180
-  flipped: false
 
   constructor: (@$el) ->
     @cardWidth = @$el.width()
@@ -28,7 +27,6 @@ class Flipper
 
   complete: ->
     @rotation = if @delta < 0 then -@maxRotation else @maxRotation
-    @flipped = true
     @_ease()
     @_sync()
 
@@ -38,14 +36,6 @@ class Flipper
     @_sync()
 
   onSwipeStatus: (event, phase, direction, distance) ->
-    switch phase
-      when 'move'
-        return unless direction in ['left', 'right']
-        @progress (distance / @cardWidth) * (direction is 'left' and -1 or 1)
-      when 'end'
-        @complete()
-      when 'cancel'
-        @reset()
 
 Card = React.createClass
 
@@ -65,17 +55,32 @@ Card = React.createClass
       tap: @onTap
 
   onTap: ->
-    unless @flipper.flipped
-      @flipper.complete()
+    unless @state.flipped
+      @completeFlip()
 
   onSwipeStatus: (event, phase, direction, distance) ->
-    unless @flipper.flipped
-      @flipper.onSwipeStatus arguments...
+    unless @state.flipped
+      switch phase
+        when 'move'
+          return unless direction in ['left', 'right']
+          @flipper.progress (distance / @flipper.cardWidth) * (direction is 'left' and -1 or 1)
+        when 'end'
+          @completeFlip()
+        when 'cancel'
+          @flipper.reset()
+
+  completeFlip: ->
+    @flipper.complete()
+    @setState flipped: true
 
   render: ->
+    cx = React.addons.classSet
     <div className="card">
-      <div className="card__flipper"}
-          ref="flipper">
+      <div className={cx
+              card__flipper: true
+              flipped: @state.flipped
+            }
+            ref="flipper">
         <div className="card__front">
           <img draggable="false"
                src={@props.photoUrl} />
