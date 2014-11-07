@@ -1,26 +1,40 @@
 require './globals'
-Deck = require './components/deck'
+Card = require './components/card'
 EggService = require './services/egg_service'
 
 App = React.createClass
 
   getInitialState: ->
     eggs: []
-    selected: null
+    index: -1
+    visibleEggs: []
 
   componentDidMount: ->
-    @fetchEggs()
+    EggService.fetch (err, eggs) =>
+      @setState {eggs}
+      @addNextEggCard()
+      @addNextEggCard()
 
   loading: ->
     @state.eggs.length < 1
 
-  render: ->
-    <Deck eggs={@state.eggs}
-          selected={@state.selected} />
+  removeTopEggCard: ->
+    @state.visibleEggs.pop()
+    @setState @state
 
-  fetchEggs: ->
-    EggService.fetch (err, eggs) =>
-      @setState {eggs}
+  addNextEggCard: ->
+    if egg = @state.eggs[++@state.index]
+      @state.visibleEggs.unshift egg
+      @setState @state
+
+  render: ->
+    <div className="deck">{
+      for egg in @state.visibleEggs
+        <Card key={egg.email}
+              onSwiped={@addNextEggCard}
+              onCompleted={@removeTopEggCard}
+              {...egg} />
+    }</div>
 
 window.start = (selector) ->
   React.render <App />, document.querySelector(selector)

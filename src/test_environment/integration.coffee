@@ -31,4 +31,23 @@ module.exports =
   #   @card.isDisplayed().should.eventually.eql false
   asPromised: (promiser) ->
     new wd.asserters.Asserter (browser, done) ->
-      promiser().nodeify (err) -> done(null, not err)
+      promiser().nodeify (err, value) ->
+        if err
+          done err
+        else
+          done null, value, value
+
+
+  # Usage:
+  # @browser.waitFor elementGone @card
+  elementGone: (element) ->
+    new wd.asserters.Asserter (target, done) ->
+      element.isDisplayed().nodeify (err, displayed) ->
+        if err?['jsonwire-error']?.summary is 'StaleElementReference'
+          err = null
+        if err
+          done err
+        else
+          done(null, !displayed, displayed and 'still displayed' or 'gone')
+
+

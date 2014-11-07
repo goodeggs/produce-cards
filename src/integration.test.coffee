@@ -1,4 +1,4 @@
-{asPromised} =require './test_environment/integration'
+{elementGone} = require './test_environment/integration'
 
 describe 'faces', ->
   before ->
@@ -12,14 +12,15 @@ describe 'faces', ->
 
   describe 'an egg card', ->
     before ->
-      @card = @browser.elementByCss('.card')
+      @card = @browser.elementByCss('.card:last-child')
 
     it 'flips when clicked', ->
       @card.click()
-      .waitForElementByCssSelector '.card__flipper.flipped', timeout: 3000
+      .waitForElementByCssSelector '>', '.card__flipper.flipped', timeout: 3000
 
     it 'is tossed when clicked again', ->
       @card.click()
-      .waitFor asPromised =>
-        @card.isDisplayed().should.eventually.eql false
-      , 3000
+      .waitFor elementGone(@card), 3000
+
+    it 'reveals the next card', ->
+      @browser.waitForElementByCssSelector '.card'

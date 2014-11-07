@@ -106,8 +106,8 @@ class Swiper
 
   swipe: ({direction, velocity}={}) ->
     direction ?= LEFT
-    velocity ?= FAST_SWIPE * 8
-    velocity = Math.max(FAST_SWIPE, Math.abs velocity) + 100
+    velocity ?= FAST_SWIPE * 7
+    velocity = Math.max(FAST_SWIPE, Math.abs velocity) * 1.5
     oldDisplacement = @displacement
     @displacement = if direction < 0 then -@finalDisplacement else @finalDisplacement
     duration = Math.abs(@displacement - oldDisplacement) / velocity
@@ -141,6 +141,8 @@ Card = React.createClass
   propTypes:
     name: React.PropTypes.string.isRequired
     photoUrl: React.PropTypes.string.isRequired
+    onCompleted: React.PropTypes.func
+    onSwiped: React.PropTypes.func
 
   getInitialState: ->
     flipped: false
@@ -162,11 +164,11 @@ Card = React.createClass
 
   onSwipeCompleted: ->
     @setState swiped: true
+    @props.onSwiped?()
     @$el.transitionEnd (event) =>
       return unless jQuery(event.target).hasClass 'card__swiper'
       @$el.off()
-      # TODO: remove this card. Add a new one?
-      console.log "CARD DONE!"
+      @props.onCompleted?()
 
   onTap: ->
     switch
