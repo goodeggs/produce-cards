@@ -105,9 +105,10 @@ class Swiper
     @_sync()
 
   swipe: ({direction, velocity}={}) ->
+    defaultVelocity = FAST_SWIPE * 5
     direction ?= LEFT
-    velocity ?= FAST_SWIPE * 7
-    velocity = Math.max(FAST_SWIPE, Math.abs velocity) * 1.5
+    velocity ?= defaultVelocity
+    velocity = Math.max(defaultVelocity, Math.abs velocity) * 1.5
     oldDisplacement = @displacement
     @displacement = if direction < 0 then -@finalDisplacement else @finalDisplacement
     duration = Math.abs(@displacement - oldDisplacement) / velocity

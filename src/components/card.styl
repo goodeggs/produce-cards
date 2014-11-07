@@ -1,11 +1,9 @@
 .card
   position absolute
-  margin 0 auto
   left 0
   right 0
   top 0
-  max-width 500px
-  perspective 1000
+  perspective 1500
 
 .card__swiper
   transition-timing-function cubic-bezier(0.16, 0.06, 0.65, 0.24) /* fastOut */
@@ -36,7 +34,8 @@
 
 .card__back
   text-align center
-  font-size 60px
+  font-size 100px
+  font-family Helvetica, sans-serif
 
   display -webkit-box
   -webkit-box-pack center
@@ -46,5 +45,5 @@
   transform rotateY(180deg)
 
 .card__image
-  max-width 100%
+  width 100%
   max-height 100%
