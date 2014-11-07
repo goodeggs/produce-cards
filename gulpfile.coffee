@@ -125,10 +125,14 @@ gulp.task 'serve:dev', (done) ->
   connect = require 'connect'
   serveStatic = require 'serve-static'
   http = require 'http'
+  request = require 'request'
   port = settings.port
 
   app = connect()
   .use serveStatic('.')
+  .use (req, res) ->
+    request "https://www.goodeggs.com/about/user_profiles"
+    .pipe res
 
   http.createServer app
   .on 'error', (err) ->

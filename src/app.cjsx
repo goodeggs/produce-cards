@@ -1,4 +1,5 @@
 require './globals'
+_ = require 'underscore'
 Card = require './components/card'
 EggService = require './services/egg_service'
 
@@ -11,6 +12,7 @@ App = React.createClass
 
   componentDidMount: ->
     EggService.fetch (err, eggs) =>
+      eggs = _(eggs).shuffle()
       @setState {eggs}
       @addNextEggCard()
       @addNextEggCard()
@@ -30,7 +32,7 @@ App = React.createClass
   render: ->
     <div className="deck">{
       for egg in @state.visibleEggs
-        <Card key={egg.email}
+        <Card key={egg.id}
               onSwiped={@addNextEggCard}
               onCompleted={@removeTopEggCard}
               {...egg} />
