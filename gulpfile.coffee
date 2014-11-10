@@ -44,6 +44,11 @@ gulp.task 'test:unit', ['compile:tests', 'concat:bower'], (done) ->
   karma.start
     configFile: __dirname + '/karma.conf.coffee'
     singleRun: true
+    browsers: [{
+      chrome: 'Chrome'
+      phantomjs: 'PhantomJS'
+      firefox: 'Firefox'
+    }[settings.browser]]
   , done
 
 gulp.task 'test:integration', ['compile:app', 'concat:bower', 'serve:dev', 'serve:selenium'], (done) ->
