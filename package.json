@@ -53,6 +53,9 @@
     "touch-velocity": "0.0.3",
     "underscore": "~1.7.0"
   },
+  "engines": {
+    "node": "0.10.x"
+  },
   "scripts": {
     "prepublish": "bower install && gulp clean build",
     "test": "gulp test"
