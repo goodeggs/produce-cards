@@ -7,6 +7,7 @@
     "Adam Hull <adam@hmlad.com>"
   ],
   "main": "lib/index.js",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/goodeggs/faces.git"
@@ -53,11 +54,7 @@
     "underscore": "~1.7.0"
   },
   "scripts": {
-    "prepublish": "gulp clean build",
+    "prepublish": "bower install && gulp clean build",
     "test": "gulp test"
-  },
-  "publishConfig": {
-    "registry": "https://goodeggs.registry.nodejitsu.com/",
-    "always-auth": true
   }
 }
