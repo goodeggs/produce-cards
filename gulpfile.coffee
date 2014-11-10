@@ -122,31 +122,10 @@ gulp.task 'serve:selenium', ->
   tcpPort.waitUntilUsed(settings.seleniumServer.port, 500, 20000)
 
 gulp.task 'serve:dev', (done) ->
-  connect = require 'connect'
-  serveStatic = require 'serve-static'
-  http = require 'http'
-  request = require 'request'
-  port = settings.port
-
-  app = connect()
-  .use serveStatic('.')
-  .use (req, res) ->
-    request "https://www.goodeggs.com/about/user_profiles"
-    .pipe res
-
-  http.createServer app
-  .on 'error', (err) ->
-    if err.code is 'EADDRINUSE'
-      fallbackPort = port + Math.floor(Math.random() * 1000)
-      gutil.log "#{port} is busy, trying #{fallbackPort}"
-      setImmediate => @listen fallbackPort
-    else
-      throw err
+  require './server'
   .on 'listening', ->
-    settings.port = @address().port
     @unref()
     done()
-  .listen port
 
 gulp.task 'watch', ->
   gulp.watch 'src/**/*.styl', ['styles']

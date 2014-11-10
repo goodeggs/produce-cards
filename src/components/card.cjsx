@@ -3,6 +3,7 @@ Velocity = require 'touch-velocity'
 LEFT = -1
 RIGHT = 1
 
+SWIPE_THRESHOLD = 20 # px
 NORMAL_SWIPE = 300 # px/s
 FAST_SWIPE = 500
 
@@ -56,7 +57,7 @@ class Flipper
     absVelocity = Math.abs velocity
     committed = velocity * @rotation > 0
 
-    if Math.abs(@rotation) < 15
+    if Math.abs(@displacement) < SWIPE_THRESHOLD
       @flip()
     else if absRotation >= @POINT_OF_NO_RETURN
       @flip direction: @rotation
@@ -70,6 +71,7 @@ class Flipper
     return true
 
   reset: ->
+    @displacement = 0
     @rotation = 0
     @percent = 0
     @intial = null
@@ -123,7 +125,7 @@ class Swiper
     absVelocity = Math.abs velocity
     committed = velocity * @displacement > 0
 
-    if absDisplacement < 20
+    if absDisplacement < SWIPE_THRESHOLD
       @swipe()
     else if absDisplacement >= @POINT_OF_NO_RETURN
       @swipe {direction: @displacement, velocity}

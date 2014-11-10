@@ -2,7 +2,7 @@
 
 Learn names with flashcards
 
-[![Build Status](https://magnum.travis-ci.com/goodeggs/faces.png)](https://magnum.travis-ci.com/goodeggs/faces)
+[![Build Status](http://img.shields.io/travis/goodeggs/faces.svg?style=flat-square)](https://travis-ci.org/goodeggs/faces)
 
 ## Contributing
 
