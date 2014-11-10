@@ -84,13 +84,13 @@ gulp.task 'styles', ->
 gulp.task 'compile:app', ->
   source = require 'vinyl-source-stream'
   rename = require 'gulp-rename'
-  watchify = require 'watchify'
 
   bundler = buildBrowserify
     entries: './src/app.cjsx'
     debug: true
 
   if settings.watch
+    watchify = require 'watchify'
     bundler = watchify bundler
     .on 'update', ->
       gutil.log 'Watchify', gutil.colors.cyan arguments[0]
