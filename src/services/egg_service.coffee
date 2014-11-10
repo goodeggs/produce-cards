@@ -10,7 +10,6 @@ class EggService
     jQuery.ajax "/eggs.json",
       dataType: 'json'
     .done (eggs) =>
-      console.log 'done!'
       done null, eggs.map @transform
 
 module.exports = EggService

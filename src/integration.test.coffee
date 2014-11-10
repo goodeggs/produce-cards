@@ -8,7 +8,7 @@ describe 'faces', ->
     @browser.title().should.eventually.match /egg/i
 
   it 'loads an egg card', ->
-    @browser.waitForElementByCssSelector '.card'
+    @browser.waitForElementByCssSelector '.card', 10000
 
   describe 'an egg card', ->
     before ->

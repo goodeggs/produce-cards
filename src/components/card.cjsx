@@ -17,7 +17,6 @@ class Flipper
   rotation: 0     # in degrees from -180 to 180
   percent: 0  # percent rotated, from -1 to 1
 
-
   constructor: (@$el, {@onCompleted}={}) ->
     @cardWidth = @$el.width()
     @velocity = new Velocity()
@@ -57,7 +56,9 @@ class Flipper
     absVelocity = Math.abs velocity
     committed = velocity * @rotation > 0
 
-    if absRotation >= @POINT_OF_NO_RETURN
+    if Math.abs(@rotation) < 15
+      @flip()
+    else if absRotation >= @POINT_OF_NO_RETURN
       @flip direction: @rotation
     else if committed and (absRotation > 40 or absVelocity > NORMAL_SWIPE)
       @flip direction: @rotation
@@ -109,7 +110,7 @@ class Swiper
     direction ?= LEFT
     velocity ?= defaultVelocity
     velocity = Math.max(defaultVelocity, Math.abs velocity) * 1.5
-    oldDisplacement = @displacement
+    oldDisplacement = @displacement or 0
     @displacement = if direction < 0 then -@finalDisplacement else @finalDisplacement
     duration = Math.abs(@displacement - oldDisplacement) / velocity
     @_ease(duration)
@@ -122,7 +123,9 @@ class Swiper
     absVelocity = Math.abs velocity
     committed = velocity * @displacement > 0
 
-    if absDisplacement >= @POINT_OF_NO_RETURN
+    if absDisplacement < 20
+      @swipe()
+    else if absDisplacement >= @POINT_OF_NO_RETURN
       @swipe {direction: @displacement, velocity}
     else if committed and (absDisplacement > (@POINT_OF_NO_RETURN / 3) or absVelocity > NORMAL_SWIPE)
       @swipe {direction: @displacement, velocity}
@@ -161,7 +164,7 @@ Card = React.createClass
     @$el.swipe
       allowPageScroll: 'vertical'
       swipeStatus: @onSwipeStatus
-      tap: @onTap
+      threshold: 0 # always swipe, never tap
 
   onSwipeCompleted: ->
     @setState swiped: true
@@ -171,14 +174,8 @@ Card = React.createClass
       @$el.off()
       @props.onCompleted?()
 
-  onTap: ->
-    switch
-      when not @state.flipped
-        @flipper.flip()
-      when not @state.swiped
-        @swiper.swipe()
-
   onSwipeStatus: (event, phase, direction, distance) ->
+    event.preventDefault?() # prevent veritcal scroll while swiping
     x = event.pageX or event.touches?[0]?.pageX
     animation = switch
       when not @state.flipped
@@ -191,7 +188,7 @@ Card = React.createClass
     switch phase
       when 'move'
         animation.progress x
-      when 'end'
+      when 'end', 'cancel'
         animation.settle()
 
   render: ->
