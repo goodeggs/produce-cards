@@ -139,3 +139,4 @@ gulp.task 'open', ['dev'], ->
   open = require 'open'
   open settings.devServerUrl()
 
+gulp.task 'build', ['compile:app', 'concat:bower', 'styles']
