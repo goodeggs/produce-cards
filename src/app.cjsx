@@ -1,7 +1,12 @@
 require './globals'
 _ = require 'underscore'
 Card = require './components/card'
+AppHeader = require './components/app_header'
 EggService = require './services/egg_service'
+
+foodhubs = [
+  {slug: 'all', name: 'All Eggs'}
+]
 
 App = React.createClass
 
@@ -9,6 +14,8 @@ App = React.createClass
     eggs: []
     index: -1
     visibleEggs: []
+    foodhub: foodhubs[0]
+    foodhubs: foodhubs
 
   componentDidMount: ->
     EggService.fetch (err, eggs) =>
@@ -30,13 +37,18 @@ App = React.createClass
       @setState @state
 
   render: ->
-    <div className="deck">{
-      for egg in @state.visibleEggs
-        <Card key={egg.id}
-              onSwiped={@addNextEggCard}
-              onCompleted={@removeTopEggCard}
-              {...egg} />
-    }</div>
+    <div>
+      <AppHeader
+        foodhub={@state.foodhub}
+        foodhubs={@state.foodhubs} />
+      <div className="deck">{
+        for egg in @state.visibleEggs
+          <Card key={egg.id}
+                onSwiped={@addNextEggCard}
+                onCompleted={@removeTopEggCard}
+                {...egg} />
+      }</div>
+    </div>
 
 window.start = (selector) ->
   React.render <App />, document.querySelector(selector)
