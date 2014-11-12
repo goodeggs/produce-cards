@@ -7,6 +7,16 @@ gulp.task 'clean', ->
   del = require 'del'
   del.sync 'lib'
 
+# In development, log errors without halting watch.
+# For test and production builds, throw errors
+logErrors = (namespace) ->
+  if settings.watch
+    require('gulp-plumber')
+      errorHandler: ->
+        gutil.log namespace, 'error', gutil.colors.red arguments...
+  else
+    require('through')()
+
 buildBrowserify = do ->
   browserify = require 'browserify'
   reactify = require 'coffee-reactify'
@@ -74,6 +84,7 @@ gulp.task 'styles', ->
   rename = require 'gulp-rename'
 
   gulp.src 'src/rollup.styl'
+  .pipe logErrors 'stylus'
   .pipe stylus
     use: nib()
     compress: false
@@ -97,11 +108,8 @@ gulp.task 'compile:app', ->
       bundle()
 
   bundle = ->
-    b = bundler.bundle()
-    if settings.watch
-      b.on 'error', ->
-        gutil.log 'Browserify Error', gutil.colors.red arguments...
-    b
+    logErrors 'browserify'
+    .pipe bundler.bundle()
     .pipe source 'app.js'
     .pipe gulp.dest 'lib'
 
