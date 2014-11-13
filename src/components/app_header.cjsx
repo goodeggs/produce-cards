@@ -14,7 +14,7 @@ AppHeader = React.createClass
       <select className="app-header__select"
               value={@props.foodhub.slug}>{
         for foodhub in @props.foodhubs
-          <option value="{foodhub.slug}">{foodhub.name}</option>
+          <option value={foodhub.slug}>{foodhub.name}</option>
       }</select>
     </header>
 

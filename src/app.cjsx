@@ -4,9 +4,10 @@ Card = require './components/card'
 AppHeader = require './components/app_header'
 EggService = require './services/egg_service'
 
-foodhubs = [
-  {slug: 'all', name: 'All Eggs'}
-]
+# Artificial foodhub-like menu item
+allHub =
+  slug: 'all'
+  name: 'All Eggs'
 
 App = React.createClass
 
@@ -14,8 +15,7 @@ App = React.createClass
     eggs: []
     index: -1
     visibleEggs: []
-    foodhub: foodhubs[0]
-    foodhubs: foodhubs
+    foodhub: allHub
 
   componentDidMount: ->
     EggService.fetch (err, eggs) =>
@@ -26,6 +26,10 @@ App = React.createClass
 
   loading: ->
     @state.eggs.length < 1
+
+  foodhubs: ->
+    if @loading() then []
+    else [allHub].concat EggService.foodhubs()
 
   removeTopEggCard: ->
     @state.visibleEggs.pop()
@@ -40,7 +44,7 @@ App = React.createClass
     <div>
       <AppHeader
         foodhub={@state.foodhub}
-        foodhubs={@state.foodhubs} />
+        foodhubs={@foodhubs()} />
       <div className="deck">{
         for egg in @state.visibleEggs
           <Card key={egg.id}

@@ -12,7 +12,7 @@ describe 'faces', ->
 
   describe 'an egg card', ->
     before ->
-      @card = @browser.elementByCss('.card:last-child')
+      @card = @browser.elementByCss '.card:last-child'
 
     it 'flips when clicked', ->
       @card.click()
@@ -24,3 +24,12 @@ describe 'faces', ->
 
     it 'reveals the next card', ->
       @browser.waitForElementByCssSelector '.card'
+
+  describe 'clicking the foodshed filter', ->
+    before ->
+      @select = @browser.elementByCss '.app-header__select'
+
+    it 'reveals foodhubs', ->
+      @select
+        .waitForElementByCssSelector 'option[value="sfbay"]'
+        .waitForElementByCssSelector 'option[value="nyc"]'
