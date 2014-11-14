@@ -50,4 +50,7 @@ class EggService
       .uniq false, ({slug}) -> slug
       .value()
 
+  @eggsIn: (foodhubSlug) ->
+    _(@eggs).filter ({foodhub}) -> foodhub.slug is foodhubSlug
+
 module.exports = EggService

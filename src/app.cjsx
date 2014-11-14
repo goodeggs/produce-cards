@@ -3,6 +3,9 @@ _ = require 'underscore'
 Card = require './components/card'
 AppHeader = require './components/app_header'
 EggService = require './services/egg_service'
+DeckStore = require './stores/deck_store'
+
+VISIBLE_CARDS = 4
 
 # Artificial foodhub-like menu item
 allHub =
@@ -13,43 +16,47 @@ App = React.createClass
 
   getInitialState: ->
     eggs: []
-    index: -1
-    visibleEggs: []
     foodhub: allHub
 
   componentDidMount: ->
     EggService.fetch (err, eggs) =>
-      eggs = _(eggs).shuffle()
-      @setState {eggs}
-      @addNextEggCard()
-      @addNextEggCard()
+      @redeal eggs
 
-  loading: ->
-    @state.eggs.length < 1
+  redeal: (eggs) ->
+    DeckStore.reset eggs
+    DeckStore.shuffle()
+    @setState eggs: DeckStore.peekAtTop VISIBLE_CARDS
 
   foodhubs: ->
-    if @loading() then []
+    if DeckStore.isEmpty() then []
     else [allHub].concat EggService.foodhubs()
 
-  removeTopEggCard: ->
-    @state.visibleEggs.pop()
-    @setState @state
+  onCardCompleted: ->
+    DeckStore.discardTopCard()
+    @setState eggs: DeckStore.peekAtTop VISIBLE_CARDS
 
-  addNextEggCard: ->
-    if egg = @state.eggs[++@state.index]
-      @state.visibleEggs.unshift egg
-      @setState @state
+  filter: (foodhubSlug) ->
+    console.log 'filtering!', foodhubSlug, EggService.eggsIn(foodhubSlug).length
+    if foodhubSlug is 'all'
+      eggs = EggService.eggs
+      foodhub = allHub
+    else
+      eggs = EggService.eggsIn foodhubSlug
+      foodhub = EggService.hubs[foodhubSlug]
+
+    @setState {foodhub}
+    @redeal eggs
 
   render: ->
     <div>
       <AppHeader
         foodhub={@state.foodhub}
-        foodhubs={@foodhubs()} />
+        foodhubs={@foodhubs()}
+        onFoodhubSelected={@filter}/>
       <div className="deck">{
-        for egg in @state.visibleEggs
+        for egg in @state.eggs
           <Card key={egg.id}
-                onSwiped={@addNextEggCard}
-                onCompleted={@removeTopEggCard}
+                onCompleted={@onCardCompleted}
                 {...egg} />
       }</div>
     </div>
