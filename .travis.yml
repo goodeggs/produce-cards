@@ -6,3 +6,10 @@ env:
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+deploy:
+  provider: heroku
+  api_key:
+    secure: DShDbZF41B857BttstzWBTvlDamDgcR3o0giORFIBcnB90bjDXvDQ48kpNVFGjJeXOevUo92Y6oFUhYgGghP1i9ZboBzNjyXcgKKSK8KIB6jW3bk6ZVOKZLNQ2fbHvTV1sPshWczBx8ITSx+Hoop475zeahnduCaY2zeFY82tsg=
+  app: goodeggs-faces
+  on:
+    repo: goodeggs/faces
