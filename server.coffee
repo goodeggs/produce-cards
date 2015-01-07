@@ -10,7 +10,7 @@ port = settings.port
 app = connect()
 .use serveStatic('.')
 .use (req, res) ->
-  request "https://www.goodeggs.com/about/user_profiles"
+  request "https://api.goodeggs.com/market-sections/nyc/produce"
   .pipe res
 
 module.exports = http.createServer app

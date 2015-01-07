@@ -4,7 +4,7 @@ conf = convict
   port:
     doc: "Localhost port dev server should listen on"
     format: 'port'
-    default: 8000
+    default: 8004
     env: 'PORT'
 
   seleniumServer:

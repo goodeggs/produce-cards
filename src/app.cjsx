@@ -28,8 +28,7 @@ App = React.createClass
     @setState eggs: DeckStore.peekAtTop VISIBLE_CARDS
 
   foodhubs: ->
-    if DeckStore.isEmpty() then []
-    else [allHub].concat EggService.foodhubs()
+    []
 
   onCardCompleted: ->
     DeckStore.discardTopCard()

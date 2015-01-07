@@ -147,7 +147,6 @@ Card = React.createClass
   propTypes:
     name: React.PropTypes.string.isRequired
     photoUrl: React.PropTypes.string.isRequired
-    foodhub: React.PropTypes.object.isRequired
     onCompleted: React.PropTypes.func
     onSwiped: React.PropTypes.func
 
@@ -196,7 +195,7 @@ Card = React.createClass
 
   render: ->
     cx = React.addons.classSet
-    <div className="card" data-foodhub={@props.foodhub.slug}>
+    <div className="card">
       <div className={cx
         card__swiper: true
         swiped: @state.swiped
